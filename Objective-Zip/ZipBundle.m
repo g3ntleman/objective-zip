@@ -73,7 +73,7 @@
     
     if (! result) {
         static NSString* devLocale = nil;
-        if (! devLocale) devLocale = [[NSBundle mainBundle] developmentLocalization];
+        if (! devLocale) devLocale = [[[NSBundle mainBundle] developmentLocalization] retain];
 
         result = [self pathForResource: name ofType: ext inDirectory: nil forLocalization: devLocale];
         if (! result) {
