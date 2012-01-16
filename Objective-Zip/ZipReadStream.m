@@ -69,5 +69,17 @@
 	}
 }
 
+- (NSData*) data {
+    
+    unz_file_info file_info;
+    unzGetCurrentFileInfo(_unzFile, &file_info, NULL, 0, NULL, 0, NULL, 0);
+
+    NSData* result = [self readDataOfLength: file_info.uncompressed_size];
+    
+    [self finishedReading];
+    
+    return result;
+}
+
 
 @end

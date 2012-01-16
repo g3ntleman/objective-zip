@@ -55,7 +55,7 @@ typedef enum {
 @class FileInZipInfo;
 
 @interface ZipFile : NSObject {
-	NSString *_fileName;
+	NSString *_filePath;
 	ZipFileMode _mode;
 
 @private
@@ -68,6 +68,8 @@ typedef enum {
 - (ZipWriteStream *) writeFileInZipWithName:(NSString *)fileNameInZip compressionLevel:(ZipCompressionLevel)compressionLevel;
 - (ZipWriteStream *) writeFileInZipWithName:(NSString *)fileNameInZip fileDate:(NSDate *)fileDate compressionLevel:(ZipCompressionLevel)compressionLevel;
 - (ZipWriteStream *) writeFileInZipWithName:(NSString *)fileNameInZip fileDate:(NSDate *)fileDate compressionLevel:(ZipCompressionLevel)compressionLevel password:(NSString *)password crc32:(NSUInteger)crc32;
+
+- (NSString*) path;
 
 - (NSUInteger) numFilesInZip;
 - (NSArray *) listFileInZipInfos;

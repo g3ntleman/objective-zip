@@ -25,6 +25,10 @@
     }
     return nil;
 }
+
+- (NSString*) bundlePath {
+    return self.zipFile.path;
+}
  
 - (id)initWithPath: (NSString*) bundlePath {
     
@@ -33,9 +37,9 @@
     if (exists && ! isDirectory) {
         // expect zip file
         self.zipFile = [[[ZipFile alloc] initWithFilePath: bundlePath mode: ZipFileModeUnzip] autorelease];
-        
         return self;
     }
+        
     // otherwise, default behaviour:
     [self autorelease];
     return (id)[[NSBundle alloc] initWithPath: bundlePath];
@@ -49,12 +53,25 @@
     return nil;
 }
 
-- (NSString *)pathForResource:(NSString *)name ofType:(NSString *)ext inDirectory:(NSString *)subpath forLocalization:(NSString *)localizationName {
-    NSString* localization = localizationName.length ? [@"/" stringByAppendingString: localizationName] : @"";
+- (NSString *)pathForResource:(NSString *)name ofType:(NSString *)ext inDirectory:(NSString *)directory forLocalization:(NSString *)localizationName {
+    NSString* subpath = self.zipFile.path.lastPathComponent;
+    if (directory.length) {
+        subpath = [subpath stringByAppendingPathComponent: directory];
+    }
+    NSString* localization = localizationName.length ? [NSString stringWithFormat: @"/%@.lproj", localizationName] : @"";
     NSString* filename = ext.length ? [name stringByAppendingPathExtension: ext] : name;
     NSString* pathInZip = [NSString stringWithFormat: @"%@%@/%@", subpath, localization, filename];
     return [self.zipFile locateFileInZip: pathInZip] ? pathInZip : nil;
 }
+
+- (NSString *)pathForResource:(NSString *)name ofType:(NSString *)ext {
+    NSString* result = [self pathForResource: name ofType: ext inDirectory: nil forLocalization: nil];
+    if (! result) {
+        result = [self pathForResource: name ofType: ext inDirectory: nil forLocalization: @"en"];
+    }
+    return result;
+}
+
 
 
 @end
