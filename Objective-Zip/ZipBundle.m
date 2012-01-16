@@ -12,6 +12,7 @@
 
 @synthesize zipFile;
 
+
 + (id) bundleWithPath: (NSString*) bundlePath {
     BOOL isDirectory = NO;
     BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath: bundlePath isDirectory: &isDirectory];
@@ -65,9 +66,19 @@
 }
 
 - (NSString *)pathForResource:(NSString *)name ofType:(NSString *)ext {
-    NSString* result = [self pathForResource: name ofType: ext inDirectory: nil forLocalization: nil];
+    
+    NSArray* langs = [NSLocale preferredLanguages];
+    NSString *languageCode = [langs objectAtIndex: 0];
+    NSString* result = [self pathForResource: name ofType: ext inDirectory: nil forLocalization: languageCode];
+    
     if (! result) {
-        result = [self pathForResource: name ofType: ext inDirectory: nil forLocalization: @"en"];
+        static NSString* devLocale = nil;
+        if (! devLocale) devLocale = [[NSBundle mainBundle] developmentLocalization];
+
+        result = [self pathForResource: name ofType: ext inDirectory: nil forLocalization: devLocale];
+        if (! result) {
+            result = [self pathForResource: name ofType: ext inDirectory: nil forLocalization: nil];
+        }
     }
     return result;
 }

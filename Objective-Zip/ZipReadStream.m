@@ -69,6 +69,7 @@
 	}
 }
 
+/*" Uncompress stream into one in-memory buffer. Calls -finishedReading and returns the buffer. "*/
 - (NSData*) data {
     
     unz_file_info file_info;
