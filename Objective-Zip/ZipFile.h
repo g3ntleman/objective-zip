@@ -63,7 +63,7 @@ typedef enum {
 	unzFile _unzFile;
 }
 
-- (id) initWithFileName:(NSString *)fileName mode:(ZipFileMode)mode;
+- (id) initWithFilePath:(NSString *)filePath mode:(ZipFileMode)mode;
 
 - (ZipWriteStream *) writeFileInZipWithName:(NSString *)fileNameInZip compressionLevel:(ZipCompressionLevel)compressionLevel;
 - (ZipWriteStream *) writeFileInZipWithName:(NSString *)fileNameInZip fileDate:(NSDate *)fileDate compressionLevel:(ZipCompressionLevel)compressionLevel;

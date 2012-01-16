@@ -43,9 +43,9 @@
 @implementation ZipFile
 
 
-- (id) initWithFileName:(NSString *)fileName mode:(ZipFileMode)mode {
+- (id) initWithFilePath:(NSString *)filePath mode:(ZipFileMode)mode {
 	if ((self= [super init])) {
-		_fileName= [fileName retain];
+		_fileName= [filePath retain];
 		_mode= mode;
 		
 		switch (mode) {
