@@ -1,8 +1,11 @@
-build
-*.mode*
-*.pbxuser
-*.perspective*
 .DS_Store
 *.swp
-**/**/xcuserdata
-**/**/project.xcworkspace
+
+build/
+
+*.pbxuser
+*.perspective
+*.perspectivev3
+*.mode1v3
+*.mode2v3
+xcuserdata
