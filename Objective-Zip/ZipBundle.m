@@ -65,24 +65,27 @@
     return [self.zipFile locateFileInZip: pathInZip] ? pathInZip : nil;
 }
 
-- (NSString *)pathForResource:(NSString *)name ofType:(NSString *)ext {
+- (NSString*) pathForResource: (NSString*) name ofType: (NSString*) ext inDirectory: (NSString*) directory {
     
     NSArray* langs = [NSLocale preferredLanguages];
     NSString *languageCode = [langs objectAtIndex: 0];
-    NSString* result = [self pathForResource: name ofType: ext inDirectory: nil forLocalization: languageCode];
+    NSString* result = [self pathForResource: name ofType: ext inDirectory: directory forLocalization: languageCode];
     
     if (! result) {
         static NSString* devLocale = nil;
         if (! devLocale) devLocale = [[[NSBundle mainBundle] developmentLocalization] retain];
-
-        result = [self pathForResource: name ofType: ext inDirectory: nil forLocalization: devLocale];
+        
+        result = [self pathForResource: name ofType: ext inDirectory: directory forLocalization: devLocale];
         if (! result) {
-            result = [self pathForResource: name ofType: ext inDirectory: nil forLocalization: nil];
+            result = [self pathForResource: name ofType: ext inDirectory: directory forLocalization: nil];
         }
     }
     return result;
 }
 
+- (NSString*) pathForResource: (NSString*) name ofType: (NSString*) ext {
+    return [self pathForResource: name ofType: ext inDirectory: nil];
+}
 
 
 @end
