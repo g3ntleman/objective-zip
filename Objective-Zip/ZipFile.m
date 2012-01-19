@@ -87,6 +87,10 @@
     return _filePath;
 }
 
+- (NSString*) description {
+    return [NSString stringWithFormat: @"%@ at %@.", [super description], self.path];
+}
+
 - (void) dealloc {
 	[_filePath release];
 	[super dealloc];
@@ -127,6 +131,24 @@
 	}
 	
 	return [[[ZipWriteStream alloc] initWithZipFileStruct:_zipFile fileNameInZip:fileNameInZip] autorelease];
+}
+
+/*" Convenience method. If there is no file ar filePath, this method does nothing. "*/
+- (void) copyFileFromFilePath: (NSString*) filePath
+             intoZipDirectory: (NSString*) pathInZip 
+             compressionLevel: (ZipCompressionLevel)compressionLevel  {
+
+    NSData* fileData = [NSData dataWithContentsOfMappedFile: filePath];
+    if (fileData) {
+        NSString* targetPath = filePath.lastPathComponent;
+        if (pathInZip.length) {
+            targetPath = [pathInZip stringByAppendingPathComponent: targetPath];
+        }
+        ZipWriteStream* stream = [self writeFileIntoZipWithName: targetPath compressionLevel: ZipCompressionLevelNone];
+        
+        [stream writeData: fileData]; 
+        [stream finishedWriting];
+    }
 }
 
 - (ZipWriteStream *) writeFileIntoZipWithName:(NSString *)fileNameInZip fileDate:(NSDate *)fileDate compressionLevel:(ZipCompressionLevel)compressionLevel {
@@ -201,7 +223,7 @@
 	return [[[ZipWriteStream alloc] initWithZipFileStruct:_zipFile fileNameInZip:fileNameInZip] autorelease];
 }
 
-- (NSUInteger) numFilesInZip {
+- (NSUInteger) fileCount {
 	if (_mode != ZipFileModeUnzip) {
 		NSString *reason= [NSString stringWithFormat:@"Operation not permitted without Unzip mode"];
 		@throw [[[ZipException alloc] initWithReason:reason] autorelease];
@@ -218,7 +240,7 @@
 }
 
 - (NSArray *) allFileInZipInfos {
-	int num= (uInt)[self numFilesInZip];
+	int num= (uInt)[self fileCount];
 	if (num < 1)
 		return [[[NSArray alloc] init] autorelease];
 	

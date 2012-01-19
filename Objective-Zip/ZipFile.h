@@ -54,9 +54,13 @@
 - (ZipWriteStream *) writeFileIntoZipWithName:(NSString *)fileNameInZip fileDate:(NSDate *)fileDate compressionLevel:(ZipCompressionLevel)compressionLevel;
 - (ZipWriteStream *) writeFileIntoZipWithName:(NSString *)fileNameInZip fileDate:(NSDate *)fileDate compressionLevel:(ZipCompressionLevel)compressionLevel password:(NSString *)password crc32:(NSUInteger)crc32;
 
+- (void) copyFileFromFilePath: (NSString*) filePath
+             intoZipDirectory: (NSString*) pathInZip 
+             compressionLevel: (ZipCompressionLevel)compressionLevel;
+
 - (NSString*) path;
 
-- (NSUInteger) numFilesInZip;
+- (NSUInteger) fileCount;
 - (NSArray *) allFileInZipInfos;
 
 - (void) goToFirstFileInZip;

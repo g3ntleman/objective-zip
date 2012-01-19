@@ -45,7 +45,7 @@
 
 - (id) initWithZipFileStruct:(zipFile)zipFile fileNameInZip:(NSString *)fileNameInZip;
 
-- (void) writeData:(NSData *)data;
+- (ZipWriteStream*) writeData:(NSData *)data;
 - (void) finishedWriting;
 - (void) copyFromFilePath: (NSString*) path;
 

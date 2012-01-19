@@ -49,12 +49,15 @@
 	return self;
 }
 
-- (void) writeData:(NSData *)data {
+/*" returns self. "*/
+- (ZipWriteStream*) writeData:(NSData *)data {
 	int err= zipWriteInFileInZip(_zipFile, [data bytes], (unsigned)[data length]);
 	if (err < 0) {
 		NSString *reason= [NSString stringWithFormat:@"Error in writing '%@' in the zipfile", _fileNameInZip];
 		@throw [[[ZipException alloc] initWithError:err reason:reason] autorelease];
+        return nil;
 	}
+    return self;
 }
 
 - (void) finishedWriting {
@@ -66,8 +69,8 @@
 }
 
 - (void) copyFromFilePath: (NSString*) path {
-    [self writeData: [NSData dataWithContentsOfMappedFile: path]];
-    [self finishedWriting];
+    NSData* fileData = [NSData dataWithContentsOfMappedFile: path];
+    [[self writeData: fileData] finishedWriting];  
 }
 
 @end
