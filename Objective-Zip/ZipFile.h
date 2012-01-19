@@ -35,24 +35,9 @@
 
 #include "zip.h"
 #include "unzip.h"
-
-
-typedef enum {
-	ZipFileModeUnzip,
-	ZipFileModeCreate,
-	ZipFileModeAppend
-} ZipFileMode;
-
-typedef enum {
-	ZipCompressionLevelDefault= -1,
-	ZipCompressionLevelNone= 0,
-	ZipCompressionLevelFastest= 1,
-	ZipCompressionLevelBest= 9
-} ZipCompressionLevel;	
-
-@class ZipReadStream;
-@class ZipWriteStream;
-@class FileInZipInfo;
+#import "ZipWriteStream.h"
+#import "ZipReadStream.h"
+#import "FileInZipInfo.h"
 
 @interface ZipFile : NSObject {
 	NSString *_filePath;
@@ -65,14 +50,14 @@ typedef enum {
 
 - (id) initWithFilePath:(NSString *)filePath mode:(ZipFileMode)mode;
 
-- (ZipWriteStream *) writeFileInZipWithName:(NSString *)fileNameInZip compressionLevel:(ZipCompressionLevel)compressionLevel;
-- (ZipWriteStream *) writeFileInZipWithName:(NSString *)fileNameInZip fileDate:(NSDate *)fileDate compressionLevel:(ZipCompressionLevel)compressionLevel;
-- (ZipWriteStream *) writeFileInZipWithName:(NSString *)fileNameInZip fileDate:(NSDate *)fileDate compressionLevel:(ZipCompressionLevel)compressionLevel password:(NSString *)password crc32:(NSUInteger)crc32;
+- (ZipWriteStream *) writeFileIntoZipWithName:(NSString *)fileNameInZip compressionLevel:(ZipCompressionLevel)compressionLevel;
+- (ZipWriteStream *) writeFileIntoZipWithName:(NSString *)fileNameInZip fileDate:(NSDate *)fileDate compressionLevel:(ZipCompressionLevel)compressionLevel;
+- (ZipWriteStream *) writeFileIntoZipWithName:(NSString *)fileNameInZip fileDate:(NSDate *)fileDate compressionLevel:(ZipCompressionLevel)compressionLevel password:(NSString *)password crc32:(NSUInteger)crc32;
 
 - (NSString*) path;
 
 - (NSUInteger) numFilesInZip;
-- (NSArray *) listFileInZipInfos;
+- (NSArray *) allFileInZipInfos;
 
 - (void) goToFirstFileInZip;
 - (BOOL) goToNextFileInZip;

@@ -47,5 +47,6 @@
 
 - (void) writeData:(NSData *)data;
 - (void) finishedWriting;
+- (void) copyFromFilePath: (NSString*) path;
 
 @end

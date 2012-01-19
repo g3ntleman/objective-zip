@@ -48,4 +48,6 @@
 - (NSData *)readDataOfLength:(NSUInteger)length;
 - (void) finishedReading;
 
+- (NSData*) data;
+
 @end

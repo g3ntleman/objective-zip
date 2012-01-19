@@ -13,7 +13,9 @@
 
 @property (retain, nonatomic) ZipFile* zipFile;
 
-/*" all the -path... methods only return path names relative to the zip file root. In order to retrieve the data from files at those paths, use the -dataWithContentsOfPath: method. "*/
+/*" all the -path... methods only return path names relative to the zip file root. In order to retrieve the data from files at those paths, use the -dataWithContentsOfPath: method. See below. "*/
+
+- (id)initWithPath: (NSString*) bundlePath mode: (ZipFileMode) mode;
 
 @end
 
@@ -22,7 +24,6 @@
 @interface NSBundle (ZipBundleExtensions)
 
 - (NSData*) dataWithContentsOfPath: (NSString*) pathInZip;
-
 
 
 @end

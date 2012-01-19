@@ -7,6 +7,7 @@
 //
 
 #import "ZipBundle.h"
+#import "ZipWriteStream.h"
 
 @implementation ZipBundle
 
@@ -31,19 +32,23 @@
     return self.zipFile.path;
 }
  
-- (id)initWithPath: (NSString*) bundlePath {
+- (id)initWithPath: (NSString*) bundlePath mode: (ZipFileMode) mode {
     
     BOOL isDirectory = NO;
     BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath: bundlePath isDirectory: &isDirectory];
     if (exists && ! isDirectory) {
         // expect zip file
-        self.zipFile = [[[ZipFile alloc] initWithFilePath: bundlePath mode: ZipFileModeUnzip] autorelease];
+        self.zipFile = [[[ZipFile alloc] initWithFilePath: bundlePath mode: mode] autorelease];
         return self;
     }
         
     // otherwise, default behaviour:
     [self autorelease];
     return (id)[[NSBundle alloc] initWithPath: bundlePath];
+}
+
+- (id)initWithPath: (NSString*) bundlePath {
+    return [self initWithPath: bundlePath mode: ZipFileModeUnzip];
 }
 
 - (NSData*) dataWithContentsOfPath: (NSString*) absoluteOrRelativePath {
@@ -53,6 +58,7 @@
     }
     return nil;
 }
+
 
 - (NSString *)pathForResource:(NSString *)name ofType:(NSString *)ext inDirectory:(NSString *)directory forLocalization:(NSString *)localizationName {
     NSString* subpath = self.zipFile.path.lastPathComponent;
@@ -94,8 +100,14 @@
 
 
 - (NSData*) dataWithContentsOfPath: (NSString*) absoluteOrRelativePath {
+    
+    if (! [absoluteOrRelativePath isAbsolutePath]) {
+        absoluteOrRelativePath = [self.bundlePath stringByAppendingPathComponent: absoluteOrRelativePath];
+    }
+    
     return [NSData dataWithContentsOfMappedFile: absoluteOrRelativePath];
 }
 
 
 @end
+

@@ -32,7 +32,19 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ZipFile.h"
+
+typedef enum {
+	ZipFileModeUnzip,
+	ZipFileModeCreate,
+	ZipFileModeAppend
+} ZipFileMode;
+
+typedef enum {
+	ZipCompressionLevelDefault= -1,
+	ZipCompressionLevelNone= 0,
+	ZipCompressionLevelFastest= 1,
+	ZipCompressionLevelBest= 9
+} ZipCompressionLevel;	
 
 
 @interface FileInZipInfo : NSObject {

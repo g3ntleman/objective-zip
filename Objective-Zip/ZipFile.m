@@ -92,7 +92,7 @@
 	[super dealloc];
 }
 
-- (ZipWriteStream *) writeFileInZipWithName:(NSString *)fileNameInZip compressionLevel:(ZipCompressionLevel)compressionLevel {
+- (ZipWriteStream *) writeFileIntoZipWithName:(NSString *)fileNameInZip compressionLevel:(ZipCompressionLevel)compressionLevel {
 	if (_mode == ZipFileModeUnzip) {
 		NSString *reason= [NSString stringWithFormat:@"Operation not permitted with Unzip mode"];
 		@throw [[[ZipException alloc] initWithReason:reason] autorelease];
@@ -129,7 +129,7 @@
 	return [[[ZipWriteStream alloc] initWithZipFileStruct:_zipFile fileNameInZip:fileNameInZip] autorelease];
 }
 
-- (ZipWriteStream *) writeFileInZipWithName:(NSString *)fileNameInZip fileDate:(NSDate *)fileDate compressionLevel:(ZipCompressionLevel)compressionLevel {
+- (ZipWriteStream *) writeFileIntoZipWithName:(NSString *)fileNameInZip fileDate:(NSDate *)fileDate compressionLevel:(ZipCompressionLevel)compressionLevel {
 	if (_mode == ZipFileModeUnzip) {
 		NSString *reason= [NSString stringWithFormat:@"Operation not permitted with Unzip mode"];
 		@throw [[[ZipException alloc] initWithReason:reason] autorelease];
@@ -165,7 +165,7 @@
 	return [[[ZipWriteStream alloc] initWithZipFileStruct:_zipFile fileNameInZip:fileNameInZip] autorelease];
 }
 
-- (ZipWriteStream *) writeFileInZipWithName:(NSString *)fileNameInZip fileDate:(NSDate *)fileDate compressionLevel:(ZipCompressionLevel)compressionLevel password:(NSString *)password crc32:(NSUInteger)crc32 {
+- (ZipWriteStream *) writeFileIntoZipWithName:(NSString *)fileNameInZip fileDate:(NSDate *)fileDate compressionLevel:(ZipCompressionLevel)compressionLevel password:(NSString *)password crc32:(NSUInteger)crc32 {
 	if (_mode == ZipFileModeUnzip) {
 		NSString *reason= [NSString stringWithFormat:@"Operation not permitted with Unzip mode"];
 		@throw [[[ZipException alloc] initWithReason:reason] autorelease];
@@ -217,7 +217,7 @@
 	return gi.number_entry;
 }
 
-- (NSArray *) listFileInZipInfos {
+- (NSArray *) allFileInZipInfos {
 	int num= (uInt)[self numFilesInZip];
 	if (num < 1)
 		return [[[NSArray alloc] init] autorelease];

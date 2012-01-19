@@ -65,5 +65,9 @@
 	}
 }
 
+- (void) copyFromFilePath: (NSString*) path {
+    [self writeData: [NSData dataWithContentsOfMappedFile: path]];
+    [self finishedWriting];
+}
 
 @end
