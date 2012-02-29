@@ -53,13 +53,15 @@
 
 - (NSData*) dataWithContentsOfPath: (NSString*) absoluteOrRelativePath {
     
+    NSData* result = nil; 
     if (absoluteOrRelativePath.length) {
-        if ([self.zipFile locateFileInZip: absoluteOrRelativePath]) {
-            ZipReadStream* readStream = [self.zipFile readCurrentFileInZip];
-            return [readStream data];
+        @synchronized(self.zipFile) {
+            if ([self.zipFile locateFileInZip: absoluteOrRelativePath]) {
+                result = [[self.zipFile readCurrentFileInZip] data];
+            }
         }
     }
-    return nil;
+    return result;
 }
 
 - (NSString *)pathForResource:(NSString *)name ofType:(NSString *)ext inDirectory:(NSString *)directory forLocalization:(NSString *)localizationName {
