@@ -864,6 +864,7 @@ extern int ZEXPORT unzLocateFile (file, szFileName, iCaseSensitivity)
         err = unzGetCurrentFileInfo(file,NULL,
                                     szCurrentFileName,sizeof(szCurrentFileName)-1,
                                     NULL,0,NULL,0);
+        //printf("Looking at file '%s'\n", szCurrentFileName);
         if (err == UNZ_OK)
         {
             if (unzStringFileNameCompare(szCurrentFileName,
