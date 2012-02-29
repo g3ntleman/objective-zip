@@ -77,8 +77,8 @@
     NSString* pathInZip = [directory stringByAppendingPathComponent: [localizationComponent stringByAppendingPathComponent: filename]];
     NSLog(@"Searching for file '%@' in %@", pathInZip, self);
     BOOL found = [self.zipFile locateFileInZip: pathInZip];
-    if (found) {
-        NSLog(@"Found file '%@'.", pathInZip);
+    if (! found) {
+        NSLog(@"File NOT Found: '%@'.", pathInZip);
     }
     return found ? pathInZip : nil;
 }
