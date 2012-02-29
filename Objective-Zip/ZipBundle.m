@@ -55,6 +55,15 @@
     
     NSData* result = nil; 
     if (absoluteOrRelativePath.length) {
+        if ([absoluteOrRelativePath hasPrefix: self.bundlePath]) {
+            // Make path relative:
+            absoluteOrRelativePath = [absoluteOrRelativePath substringFromIndex: self.bundlePath.length];
+        } else {
+            // Zip file paths start with a /:
+            if ([absoluteOrRelativePath characterAtIndex: 0] != '/') {
+                absoluteOrRelativePath = [@"/" stringByAppendingString: absoluteOrRelativePath];
+            }
+        }
         @synchronized(self.zipFile) {
             if ([self.zipFile locateFileInZip: absoluteOrRelativePath]) {
                 result = [[self.zipFile readCurrentFileInZip] data];
@@ -112,9 +121,11 @@
 @implementation NSBundle (ZipBundleExtensions)
 
 
+/*" Returns nil when passed an nil or empty path. "*/
 - (NSData*) dataWithContentsOfPath: (NSString*) absoluteOrRelativePath {
     
-    if (! [absoluteOrRelativePath isAbsolutePath]) {
+    if (! absoluteOrRelativePath.length) return nil;
+    if (! [absoluteOrRelativePath hasPrefix: self.bundlePath]) {
         absoluteOrRelativePath = [self.bundlePath stringByAppendingPathComponent: absoluteOrRelativePath];
     }
     
