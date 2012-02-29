@@ -88,7 +88,7 @@
 }
 
 - (NSString*) description {
-    return [NSString stringWithFormat: @"%@ at %@.", [super description], self.path];
+    return [NSString stringWithFormat: @"%@ at '%@'", [super description], self.path];
 }
 
 - (void) dealloc {
@@ -144,9 +144,7 @@
         if (pathInZip.length) {
             targetPath = [pathInZip stringByAppendingPathComponent: targetPath];
         }
-        ZipWriteStream* stream = [self writeFileIntoZipWithName: targetPath compressionLevel: ZipCompressionLevelNone];
-        
-        [stream writeData: fileData]; 
+        ZipWriteStream* stream = [[self writeFileIntoZipWithName: targetPath compressionLevel: ZipCompressionLevelNone]writeData: fileData];
         [stream finishedWriting];
     }
 }
@@ -290,20 +288,22 @@
 }
 
 - (BOOL) locateFileInZip:(NSString *)fileNameInZip {
+    
 	if (_mode != ZipFileModeUnzip) {
 		NSString *reason= [NSString stringWithFormat:@"Operation not permitted without Unzip mode"];
 		@throw [[[ZipException alloc] initWithReason:reason] autorelease];
 	}
 	
-	int err= unzLocateFile(_unzFile, [fileNameInZip cStringUsingEncoding:NSUTF8StringEncoding], 1);
-	if (err == UNZ_END_OF_LIST_OF_FILE)
-		return NO;
-
-	if (err != UNZ_OK) {
-		NSString *reason= [NSString stringWithFormat:@"Error in going to next file in zip in '%@'", _filePath];
-		@throw [[[ZipException alloc] initWithError:err reason:reason] autorelease];
+    @synchronized(self) {
+        int err= unzLocateFile(_unzFile, [fileNameInZip cStringUsingEncoding:NSUTF8StringEncoding], 1);
+        if (err == UNZ_END_OF_LIST_OF_FILE)
+            return NO;
+        
+        if (err != UNZ_OK) {
+            NSString *reason= [NSString stringWithFormat:@"Error in going to next file in zip in '%@'", _filePath];
+            @throw [[[ZipException alloc] initWithError:err reason:reason] autorelease];
+        }
 	}
-	
 	return YES;
 }
 

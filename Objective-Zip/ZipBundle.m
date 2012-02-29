@@ -64,14 +64,23 @@
 
 
 - (NSString *)pathForResource:(NSString *)name ofType:(NSString *)ext inDirectory:(NSString *)directory forLocalization:(NSString *)localizationName {
-    NSString* subpath = self.zipFile.path.lastPathComponent;
-    if (directory.length) {
-        subpath = [subpath stringByAppendingPathComponent: directory];
-    }
-    NSString* localization = localizationName.length ? [NSString stringWithFormat: @"/%@.lproj", localizationName] : @"";
+    
+    if (! directory.length) directory = @"/";
+    
+//    NSString* subpath = self.zipFile.path.lastPathComponent;
+//    if (directory.length) {
+//        subpath = [subpath stringByAppendingPathComponent: directory];
+//    }
+    NSString* localizationComponent = localizationName ? [localizationName stringByAppendingPathExtension: @"lproj"] : @"";
     NSString* filename = ext.length ? [name stringByAppendingPathExtension: ext] : name;
-    NSString* pathInZip = [NSString stringWithFormat: @"%@%@/%@", subpath, localization, filename];
-    return [self.zipFile locateFileInZip: pathInZip] ? pathInZip : nil;
+    
+    NSString* pathInZip = [directory stringByAppendingPathComponent: [localizationComponent stringByAppendingPathComponent: filename]];
+    NSLog(@"Searching for file '%@' in %@", pathInZip, self);
+    BOOL found = [self.zipFile locateFileInZip: pathInZip];
+    if (found) {
+        NSLog(@"Found file '%@'.", pathInZip);
+    }
+    return found ? pathInZip : nil;
 }
 
 - (NSString*) pathForResource: (NSString*) name ofType: (NSString*) ext inDirectory: (NSString*) directory {
