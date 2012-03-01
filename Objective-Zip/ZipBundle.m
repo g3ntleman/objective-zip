@@ -85,20 +85,17 @@
     NSString* filename = ext.length ? [name stringByAppendingPathExtension: ext] : name;
     
     NSString* pathInZip = [directory stringByAppendingPathComponent: [localizationComponent stringByAppendingPathComponent: filename]];
-    NSLog(@"Searching for file '%@' in %@", pathInZip, self);
+    //NSLog(@"Searching for file '%@' in %@", pathInZip, self);
     BOOL found = [self.zipFile locateFileInZip: pathInZip];
-    if (! found) {
-        NSLog(@"File NOT Found: '%@'.", pathInZip);
-    }
     return found ? pathInZip : nil;
 }
 
 - (NSString*) pathForResource: (NSString*) name ofType: (NSString*) ext inDirectory: (NSString*) directory {
     
     NSArray* langs = [NSLocale preferredLanguages];
-    NSString *languageCode = [langs objectAtIndex: 0];
-    NSString* result = [self pathForResource: name ofType: ext inDirectory: directory forLocalization: languageCode];
+    NSString* languageCode = [langs objectAtIndex: 0];
     
+    NSString* result = [self pathForResource: name ofType: ext inDirectory: directory forLocalization: languageCode];
     if (! result) {
         static NSString* devLocale = nil;
         if (! devLocale) devLocale = [[[NSBundle mainBundle] developmentLocalization] retain];
@@ -106,6 +103,9 @@
         result = [self pathForResource: name ofType: ext inDirectory: directory forLocalization: devLocale];
         if (! result) {
             result = [self pathForResource: name ofType: ext inDirectory: directory forLocalization: nil];
+            if (! result) {
+                NSLog(@"File NOT Found: '%@'.", result);
+            }
         }
     }
     return result;
