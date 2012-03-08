@@ -104,7 +104,7 @@
         if (! result) {
             result = [self pathForResource: name ofType: ext inDirectory: directory forLocalization: nil];
             if (! result) {
-                NSLog(@"File NOT Found: '%@'.", result);
+                NSLog(@"%@: File '%@.%@' NOT Found: '%@'.", self, name, ext, result);
             }
         }
     }
