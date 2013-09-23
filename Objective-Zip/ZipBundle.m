@@ -32,22 +32,24 @@
     return self.zipFile.path;
 }
  
-- (id)initWithPath: (NSString*) bundlePath mode: (ZipFileMode) mode {
+- (id) initWithPath: (NSString*) bundlePath mode: (ZipFileMode) mode {
     
-    BOOL isDirectory = NO;
-    BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath: bundlePath isDirectory: &isDirectory];
-    if (exists && ! isDirectory) {
-        // expect zip file
-        self.zipFile = [[[ZipFile alloc] initWithFilePath: bundlePath mode: mode] autorelease];
-        return self;
+    if (self = [self init]) {
+        BOOL isDirectory = NO;
+        BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath: bundlePath isDirectory: &isDirectory];
+        if (exists && ! isDirectory) {
+            // expect zip file
+            self.zipFile = [[[ZipFile alloc] initWithFilePath: bundlePath mode: mode] autorelease];
+        } else {
+            // otherwise, default behaviour:
+            [self autorelease];
+            return (id)[[NSBundle alloc] initWithPath: bundlePath];
+        }
     }
-        
-    // otherwise, default behaviour:
-    [self autorelease];
-    return (id)[[NSBundle alloc] initWithPath: bundlePath];
+    return self;
 }
 
-- (id)initWithPath: (NSString*) bundlePath {
+- (id) initWithPath: (NSString*) bundlePath {
     return [self initWithPath: bundlePath mode: ZipFileModeUnzip];
 }
 
